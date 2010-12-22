@@ -136,7 +136,7 @@ OPTIONS.block_based = False
 OPTIONS.updater_binary = None
 OPTIONS.oem_source = None
 OPTIONS.fallback_to_full = True
-OPTIONS.backuptool = False
+OPTIONS.backuptool = True
 OPTIONS.override_device = 'auto'
 OPTIONS.override_prop = False
 
@@ -575,6 +575,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.Mount("/system")
     script.RunBackup("backup")
     script.Unmount("/system")
+
+  if OPTIONS.backuptool:
+    script.RunBackup("backup")
 
   system_progress = 0.75
 
