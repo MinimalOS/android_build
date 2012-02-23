@@ -1468,8 +1468,10 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-.PHONY: otapackage
+.PHONY: otapackage optpkg
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
+optpkg: otapackage
+	$(hide) ./vendor/xenonhd/tools/squisher
 
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
