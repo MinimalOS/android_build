@@ -21,7 +21,6 @@ PRODUCT_PACKAGES := \
     Bluetooth \
     Camera2 \
     Gallery2 \
-    Music \
     MusicFX \
     OneTimeInitializer \
     Provision \
@@ -33,6 +32,14 @@ PRODUCT_PACKAGES += \
     clatd.conf \
     pppd \
     screenrecord
+
+PRODUCT_PACKAGES += \
+    busybox \
+    rsync \
+    libncurses \
+    nano \
+    lsof \
+    bash
 
 PRODUCT_PACKAGES += \
     librs_jni \
