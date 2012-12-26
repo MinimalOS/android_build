@@ -1468,10 +1468,15 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-.PHONY: otapackage optpkg
+.PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
-optpkg: otapackage
+bacon: otapackage
+ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
+        @echo "Running releasetool"
+        $(hide) $(TARGET_CUSTOM_RELEASETOOL)
+else
 	$(hide) ./vendor/xenonhd/tools/squisher
+endif
 
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
