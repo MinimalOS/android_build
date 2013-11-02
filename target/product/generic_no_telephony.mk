@@ -44,6 +44,12 @@ PRODUCT_PACKAGES := \
     CalendarProvider \
     hostapd \
     wpa_supplicant.conf \
+    busybox \
+    rsync \
+    libncurses \
+    nano \
+    lsof \
+    bash \
     WallpaperCropper
 
 PRODUCT_PACKAGES += \
