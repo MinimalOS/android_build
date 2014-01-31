@@ -1,0 +1,10 @@
+git remote add exampleName <github repo.git>
+
+git fetch exampleName
+
+git reset --merge HEAD
+git cherry-pick --strategy=recursive -X theirs <commit>
+
+git commit -a
+
+git push origin yourBranch

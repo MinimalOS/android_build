@@ -1,0 +1,3 @@
+#!/bin/bash
+git tag `date +"%y%m%d"`
+echo SEALED `pwd`
