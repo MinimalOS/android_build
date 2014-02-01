@@ -9,7 +9,7 @@ if [ -d XenonChangelogs ]; then
 rm -rf XenonChangelogs
 fi
 
-if [ -d build/XenonChangelogs ];
+if [ -d build/XenonChangelogs ]; then
 mkdir -p build/XenonChangelogs/
 fi
 
