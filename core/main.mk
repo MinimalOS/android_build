@@ -86,6 +86,8 @@ ifneq ($(filter $(dont_bother_goals), $(MAKECMDGOALS)),)
 dont_bother := true
 endif
 
+QUIET := false
+
 # Targets that provide quick help on the build system.
 include $(BUILD_SYSTEM)/help.mk
 
@@ -488,7 +490,11 @@ ifneq ($(dont_bother),true)
 subdir_makefiles := \
 	$(shell build/tools/findleaves.py --prune=$(OUT_DIR) --prune=.repo --prune=.git $(subdirs) Android.mk)
 
+ifneq ($(QUIET),true)
 $(foreach mk, $(subdir_makefiles), $(info including $(mk) ...)$(eval include $(mk)))
+else
+$(foreach mk, $(subdir_makefiles), $(eval include $(mk)))
+endif #check for quiet
 
 endif # dont_bother
 
