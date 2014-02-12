@@ -36,14 +36,14 @@ except ImportError:
 # set this to the default remote to use in repo
 default_rem = "github"
 # set this to the default revision to use (branch/tag name)
-default_rev = "android-4.3"
+default_rev = "kitkat"
 # set this to the remote that you use for projects from your team repos
-# example fetch="https://github.com/omnirom"
-default_team_rem = "omnirom"
+# example fetch="https://github.com/TeamHorizon"
+default_team_rem = "TeamHorizon"
 # this shouldn't change unless google makes changes
 local_manifest_dir = ".repo/local_manifests"
 # change this to your name on github (or equivalent hosting)
-android_team = "omnirom"
+android_team = "TeamHorizon"
 
 
 def check_repo_exists(git_data):
@@ -204,7 +204,7 @@ def parse_device_from_folder(device):
 
 
 def parse_dependency_file(location):
-    dep_file = "omni.dependencies"
+    dep_file = "xenonhd.dependencies"
     dep_location = '/'.join([location, dep_file])
     if not os.path.isfile(dep_location):
         print("WARNING: %s file not found" % dep_location)
