@@ -104,12 +104,9 @@ OPTIONS.extra_script = None
 OPTIONS.aslr_mode = True
 OPTIONS.worker_threads = 3
 OPTIONS.override_device = 'auto'
-<<<<<<< HEAD
 OPTIONS.persist = True
 OPTIONS.no_assert = False
-=======
 OPTIONS.override_prop = False
->>>>>>> a4b994b... Allow devices to specify certain ro. props via TARGET_UNIFIED_DEVICE
 
 def MostPopularKey(d, default):
   """Given a dict, return the key corresponding to the largest
