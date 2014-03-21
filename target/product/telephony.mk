@@ -21,4 +21,3 @@ PRODUCT_PACKAGES := \
     Dialer \
     Mms \
     rild
-
