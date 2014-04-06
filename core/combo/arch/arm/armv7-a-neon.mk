@@ -40,5 +40,45 @@ arch_variant_cflags += \
     -mfloat-abi=softfp \
     -mfpu=neon
 
+#is an FPU explicitly defined?
+ifeq ($(strip $(TARGET_ARCH_VARIANT_FPU)),)
+	#no, so figure out if one is set on the GLOBAL_CFLAGS
+	currentfpu := $(strip $(filter -mfpu=%,$(TARGET_GLOBAL_CFLAGS)))
+
+	#if one is, then use that as ARCH_VARIANT_FPU
+	ifneq ($(currentfpu),)
+		TARGET_ARCH_VARIANT_FPU := $(strip $(subst -mfpu=,,$(currentfpu)))
+	else
+		TARGET_ARCH_VARIANT_FPU := neon
+	endif # ifneq ($(currentfpu),)
+endif # ifeq ($(strip $(TARGET_ARCH_VARIANT_FPU),)
+
+#get rid of existing instances of -mfpu in TARGET_GLOBAL_CP*FLAGS
+TARGET_GLOBAL_CFLAGS := $(filter-out -mfpu=%,$(TARGET_GLOBAL_CFLAGS))
+TARGET_GLOBAL_CPPFLAGS := $(filter-out -mfpu=%,$(TARGET_GLOBAL_CPPFLAGS))
+arch_variant_cflags += -mfpu=$(TARGET_ARCH_VARIANT_FPU)
+
+ifneq ($(findstring neon,$(TARGET_ARCH_VARIANT_FPU)),)
+arch_variant_cflags += -fno-tree-vectorize
+endif
+
+#is a float-abi explicitly defined?
+ifeq ($(strip $(TARGET_ARCH_VARIANT_FLOAT_ABI)),)
+	#no, so figure out if one is set on the GLOBAL_CFLAGS
+	currentfloatabi := $(strip $(filter -mfloat-abi=%,$(TARGET_GLOBAL_CFLAGS)))
+
+	#if one is, then use that as ARCH_VARIANT_FLOAT_ABI
+	ifneq ($(currentfloatabi),)
+		TARGET_ARCH_VARIANT_FLOAT_ABI := $(strip $(subst -mfloat-abi=,,$(currentfloatabi)))
+	else
+		TARGET_ARCH_VARIANT_FLOAT_ABI := softfp
+	endif # ifneq ($(currentfloatabi),)
+endif # ifeq ($(strip $(TARGET_ARCH_VARIANT_FLOAT_ABI)),)
+
+#get rid of existing instances of -mfloat-abi in TARGET_GLOBAL_CP*FLAGS
+TARGET_GLOBAL_CFLAGS := $(filter-out -mfloat-abi=%,$(TARGET_GLOBAL_CFLAGS))
+TARGET_GLOBAL_CPPFLAGS := $(filter-out -mfloat-abi=%,$(TARGET_GLOBAL_CPPFLAGS))
+arch_variant_cflags += -mfloat-abi=$(TARGET_ARCH_VARIANT_FLOAT_ABI)
+
 arch_variant_ldflags := \
 	-Wl,--fix-cortex-a8
