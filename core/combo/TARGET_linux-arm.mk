@@ -113,6 +113,15 @@ ifneq ($(filter 4.8 4.8.% 4.9 4.9.%, $(TARGET_GCC_VERSION)),)
 TARGET_arm_CFLAGS +=  -Wno-unused-parameter \
                       -Wno-unused-value \
                       -Wno-unused-function
+                      -funsafe-math-optimizations \
+                        $(TARGET_THUMB_STRICT) $(STRICT_ALIASING_WARNINGS)
+
+# Workaround for broken video recording when compiling thumb with -Os on FLO and HH
+ifeq ($(AN_ASSHAT_HAS_BROKEN_MY_CAMERA_SOURCE),true)
+  ifeq ($(strip $(BONE_STOCK)),)
+    TARGET_thumb_CFLAGS +=  -fprefetch-loop-arrays
+  endif
+endif
 
 TARGET_thumb_CFLAGS +=  -Wno-unused-parameter \
                         -Wno-unused-value \

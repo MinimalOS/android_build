@@ -17,7 +17,8 @@ CLANG_CONFIG_EXTRA_CFLAGS := \
   -D__compiler_offsetof=__builtin_offsetof \
 
 CLANG_CONFIG_UNKNOWN_CFLAGS := \
-  -funswitch-loops
+  -funswitch-loops \
+  -fprefetch-loop-arrays
 
 ifeq ($(TARGET_ARCH),arm)
   RS_TRIPLE := armv7-none-linux-gnueabi
