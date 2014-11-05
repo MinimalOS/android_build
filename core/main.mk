@@ -333,18 +333,8 @@ ifneq (,$(user_variant))
     enable_target_debugging :=
   endif
 
-  # Turn on Dalvik preoptimization for libdvm.so user builds, but only if not
-  # explicitly disabled and the build is running on Linux (since host
-  # Dalvik isn't built for non-Linux hosts).
-  ifeq (,$(WITH_DEXPREOPT))
-    ifeq ($(DALVIK_VM_LIB),libdvm.so)
-      ifeq ($(user_variant),user)
-        ifeq ($(HOST_OS),linux)
-          WITH_DEXPREOPT := true
-        endif
-      endif
-    endif
-  endif
+  # Turn odex off
+  WITH_DEXPREOPT := false
 
   # Disallow mock locations by default for user builds
   ADDITIONAL_DEFAULT_PROPERTIES += ro.allow.mock.location=0
