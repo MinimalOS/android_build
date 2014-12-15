@@ -13,17 +13,20 @@
 # limitations under the License.
 #
 
-GRAPHITE_FLAGS := -fgraphite,-floop-flatten,-floop-parallelize-all,-ftree-loop-linear,-floop-interchange,-floop-strip-mine,-floop-block
+GRAPHITE_FLAGS := -fgraphite -floop-flatten -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
 
+# Only use graphite if using SaberMod toolchain.  Allow any version of SaberMod with the wildcard symbol.
+ifneq ($(filter (SaberMod%), $(shell $(TARGET_CC) --version)),)
 ifdef LOCAL_CFLAGS
-LOCAL_CFLAGS += $(call cc-option,$(GRAPHITE_FLAGS))
+LOCAL_CFLAGS += $(GRAPHITE_FLAGS)
 else
-LOCAL_CFLAGS := $(call cc-option,$(GRAPHITE_FLAGS))
+LOCAL_CFLAGS := $(GRAPHITE_FLAGS)
 endif
 
 ifdef LOCAL_CPPFLAGS
-LOCAL_CFLAGS += $(call cpp-option,$(GRAPHITE_FLAGS))
+LOCAL_CFLAGS += $(GRAPHITE_FLAGS)
 else
-LOCAL_CPPFLAGS := $(call cpp-option,$(GRAPHITE_FLAGS))
+LOCAL_CPPFLAGS := $(GRAPHITE_FLAGS)
 endif
-####
+endif
+#####
