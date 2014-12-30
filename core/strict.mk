@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2012 The Android Open Source Project
+# Copyright (C) 2014 The SaberMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,25 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-#
-# This file is included by other product makefiles to add all the
-# emulator-related modules to PRODUCT_PACKAGES.
 #
 
-# Host modules
-PRODUCT_PACKAGES += \
+ifdef LOCAL_CFLAGS
+LOCAL_CFLAGS += $(call cc-option, -fstrict-aliasing, -Wstrict-aliasing=3, -Werror=strict-aliasing)
+else
+LOCAL_CFLAGS := $(call cc-option, -fstrict-aliasing, -Wstrict-aliasing=3, -Werror=strict-aliasing)
+endif
 
+ifdef LOCAL_CPPFLAGS
+LOCAL_CPPFLAGS += $(call cpp-option, -fstrict-aliasing, -Wstrict-aliasing=3, -Werror=strict-aliasing)
+else
+LOCAL_CPPFLAGS := $(call cpp-option, -fstrict-aliasing, -Wstrict-aliasing=3, -Werror=strict-aliasing)
+endif
+#####
 
-# Device modules
-PRODUCT_PACKAGES += \
-    egl.cfg \
-    libGLESv1_CM_emulation \
-    lib_renderControl_enc \
-    libEGL_emulation \
-    libGLESv2_enc \
-    libOpenglSystemCommon \
-    libGLESv2_emulation \
-    libGLESv1_enc \
-    qemu-props \
-    qemud
