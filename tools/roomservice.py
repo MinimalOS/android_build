@@ -20,6 +20,7 @@ from __future__ import print_function
 import json
 import sys
 import os
+import re
 from xml.etree import ElementTree as ES
 # Use the urllib importer from the Cyanogenmod roomservice
 try:
@@ -34,28 +35,27 @@ except ImportError:
 
 # Config
 # set this to the default remote to use in repo
-default_rem = "github"
+default_rem = "gh"
 # set this to the default revision to use (branch/tag name)
 default_rev = "lollipop"
 # set this to the remote that you use for projects from your team repos
 # example fetch="https://github.com/TeamHorizon"
-default_team_rem = "TeamHorizon"
+default_team_rem = "gh"
 # this shouldn't change unless google makes changes
 local_manifest_dir = ".repo/local_manifests"
 # change this to your name on github (or equivalent hosting)
-android_team = "th"
-
+android_team = "TeamHorizon"
 
 def check_repo_exists(git_data):
     if not int(git_data.get('total_count', 0)):
         raise Exception("{} not found in {} Github, exiting "
                         "roomservice".format(device, android_team))
 
-
 # Note that this can only be done 5 times per minute
 def search_github_for_device(device):
+    git_device = '+'.join(re.findall('[a-z]+|[\d]+', device))
     git_search_url = "https://api.github.com/search/repositories" \
-                     "?q=%40{}+android_device+{}".format(android_team, device)
+                     "?q=%40{}+android_device+{}+fork:true".format(android_team, git_device)
     git_req = urllib.request.Request(git_search_url)
     # this api is a preview at the moment. accept the custom media type
     git_req.add_header('Accept', 'application/vnd.github.preview')
@@ -68,7 +68,6 @@ def search_github_for_device(device):
     check_repo_exists(git_data)
     print("found the {} device repo".format(device))
     return git_data
-
 
 def get_device_url(git_data):
     device_url = ""
@@ -85,23 +84,24 @@ def get_device_url(git_data):
                     break
 
     if device_url:
-        return device_url
+        return "{}/{}".format(android_team, device_url)
     raise Exception("{} not found in {} Github, exiting "
                     "roomservice".format(device, android_team))
 
-
-def parse_device_directory(device_url):
+def parse_device_directory(device_url,device):
     to_strip = "android_device"
     repo_name = device_url[device_url.index(to_strip) + len(to_strip):]
+    repo_name = repo_name[:repo_name.index(device)]
     repo_dir = repo_name.replace("_", "/")
+    repo_dir = repo_dir + device
     return "device{}".format(repo_dir)
 
-
 # Thank you RaYmAn
-def iterate_manifests():
+def iterate_manifests(check_all):
     files = []
-    for file in os.listdir(local_manifest_dir):
-        files.append(os.path.join(local_manifest_dir, file))
+    if check_all:
+        for file in os.listdir(local_manifest_dir):
+            files.append(os.path.join(local_manifest_dir, file))
     files.append('.repo/manifest.xml')
     for file in files:
         try:
@@ -113,20 +113,25 @@ def iterate_manifests():
             for project in man.findall("project"):
                 yield project
 
-
 def check_project_exists(url):
-    for project in iterate_manifests():
+    for project in iterate_manifests(True):
         if project.get("name") == url:
             return True
     return False
 
+def check_dup_path(directory):
+    for project in iterate_manifests(False):
+        if project.get("path") == directory:
+            print ("Duplicate path %s found! Removing" % directory)
+            return project.get("name")
+    return None
 
 # Use the indent function from http://stackoverflow.com/a/4590052
 def indent(elem, level=0):
-    i = ''.join(["\n", level*"  "])
+    i = ''.join(["\n", level*" "])
     if len(elem):
         if not elem.text or not elem.text.strip():
-            elem.text = ''.join([i, "  "])
+            elem.text = ''.join([i, " "])
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
         for elem in elem:
@@ -137,7 +142,6 @@ def indent(elem, level=0):
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
 
-
 def create_manifest_project(url, directory,
                             remote=default_rem,
                             revision=default_rev):
@@ -145,6 +149,12 @@ def create_manifest_project(url, directory,
 
     if project_exists:
         return None
+
+    dup_path = check_dup_path(directory)
+    if not dup_path is None:
+            write_to_manifest(
+                append_to_manifest(
+                    create_manifest_remove(dup_path)))
 
     project = ES.Element("project",
                          attrib={
@@ -155,6 +165,9 @@ def create_manifest_project(url, directory,
                          })
     return project
 
+def create_manifest_remove(url):
+    remove = ES.Element("remove-project", attrib={"name": url})
+    return remove
 
 def append_to_manifest(project):
     try:
@@ -165,7 +178,6 @@ def append_to_manifest(project):
     lm.append(project)
     return lm
 
-
 def write_to_manifest(manifest):
     indent(manifest)
     raw_xml = ES.tostring(manifest).decode()
@@ -175,16 +187,14 @@ def write_to_manifest(manifest):
 
     with open('/'.join([local_manifest_dir, "roomservice.xml"]), 'w') as f:
         f.write(raw_xml)
-    print("wrote the new roomservice manifest")
-
+    print("Written to local device manifests")
 
 def parse_device_from_manifest(device):
-    for project in iterate_manifests():
+    for project in iterate_manifests(True):
         name = project.get('name')
         if name.startswith("android_device_") and name.endswith(device):
             return project.get('path')
     return None
-
 
 def parse_device_from_folder(device):
     search = []
@@ -198,10 +208,9 @@ def parse_device_from_folder(device):
     elif len(search) == 1:
         location = search[0]
     else:
-        print("you device can't be found in device sources..")
+        print("Your device was not found. Attempting to retrieve device repository from TeamHorizon's Github..")
         location = parse_device_from_manifest(device)
     return location
-
 
 def parse_dependency_file(location):
     dep_file = "xenonhd.dependencies"
@@ -215,7 +224,6 @@ def parse_dependency_file(location):
     except ValueError:
         raise Exception("ERROR: malformed dependency file")
     return dependencies
-
 
 def create_dependency_manifest(dependencies):
     projects = []
@@ -241,7 +249,6 @@ def create_dependency_manifest(dependencies):
     if len(projects) > 0:
         os.system("repo sync -f --no-clone-bundle %s" % " ".join(projects))
 
-
 def fetch_dependencies(device):
     location = parse_device_from_folder(device)
     if location is None or not os.path.isdir(location):
@@ -250,13 +257,11 @@ def fetch_dependencies(device):
     dependencies = parse_dependency_file(location)
     create_dependency_manifest(dependencies)
 
-
 def check_device_exists(device):
     location = parse_device_from_folder(device)
     if location is None:
         return False
     return os.path.isdir(location)
-
 
 def fetch_device(device):
     if check_device_exists(device):
@@ -264,7 +269,7 @@ def fetch_device(device):
         return
     git_data = search_github_for_device(device)
     device_url = get_device_url(git_data)
-    device_dir = parse_device_directory(device_url)
+    device_dir = parse_device_directory(device_url,device)
     project = create_manifest_project(device_url,
                                       device_dir,
                                       remote=default_team_rem)
@@ -273,7 +278,6 @@ def fetch_device(device):
         write_to_manifest(manifest)
         print("syncing the device config")
         os.system('repo sync -f --no-clone-bundle %s' % device_dir)
-
 
 if __name__ == '__main__':
     if not os.path.isdir(local_manifest_dir):
