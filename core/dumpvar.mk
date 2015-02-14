@@ -64,7 +64,8 @@ endif # CALLED_FROM_SETUP
 
 ifneq ($(PRINT_BUILD_CONFIG),)
 HOST_OS_EXTRA:=$(shell python -c "import platform; print(platform.platform())")
-$(info ============================================)
+$(info ================Team Horizon================)
+$(info   XENONHD_VERSION=$(XENONHD_VERSION))
 $(info   PLATFORM_VERSION_CODENAME=$(PLATFORM_VERSION_CODENAME))
 $(info   PLATFORM_VERSION=$(PLATFORM_VERSION))
 $(info   TARGET_PRODUCT=$(TARGET_PRODUCT))
@@ -88,9 +89,5 @@ $(info   HOST_OS_EXTRA=$(HOST_OS_EXTRA))
 $(info   HOST_BUILD_TYPE=$(HOST_BUILD_TYPE))
 $(info   BUILD_ID=$(BUILD_ID))
 $(info   OUT_DIR=$(OUT_DIR))
-ifeq ($(CYNGN_TARGET),true)
-$(info   CYNGN_TARGET=$(CYNGN_TARGET))
-$(info   CYNGN_FEATURES=$(CYNGN_FEATURES))
-endif
 $(info ============================================)
 endif
