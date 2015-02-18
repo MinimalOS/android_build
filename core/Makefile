@@ -1633,6 +1633,12 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 
 XENONHD_TARGET_PACKAGE := $(PRODUCT_OUT)/$(XENONHD_VERSION)-$(TARGET_DEVICE).zip
 
+ifeq ($(HOST_OS),darwin)
+        PACKAGE_MD5SUM :=md5 -r $(XENONHD_TARGET_PACKAGE)
+else
+        PACKAGE_MD5SUM :=md5sum $(XENONHD_TARGET_PACKAGE)
+endif
+
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
@@ -1640,9 +1646,11 @@ ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
 	$(error TARGET_CUSTOM_RELEASETOOL is deprecated)
 endif
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(XENONHD_TARGET_PACKAGE)
-	$(hide) $(MD5SUM) $(XENONHD_TARGET_PACKAGE) > $(XENONHD_TARGET_PACKAGE).md5sum
+	$(hide) $(PACKAGE_MD5SUM) > $(XENONHD_TARGET_PACKAGE).md5sum
 	@echo -e ${CL_CYN}"===========-Package complete-==========="${CL_RST}
 	@echo -e ${CL_CYN}"$(XENONHD_VERSION)-$(TARGET_DEVICE).zip"${CL_RST}
+	@echo -e ${CL_CYN}"size: "${CL_MAG}" $(shell ls -lah $(XENONHD_TARGET_PACKAGE) | awk '{ print $$5 }') "${CL_RST}
+	@echo -e ${CL_CYN}"md5: "${CL_MAG}" $(shell cat $(XENONHD_TARGET_PACKAGE).md5sum | awk '{ print $$1 }') "${CL_RST}
 	@echo -e ${CL_CYN}"========================================"${CL_RST}
 
 endif    # recovery_fstab is defined
