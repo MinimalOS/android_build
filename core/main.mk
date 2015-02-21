@@ -71,7 +71,7 @@ FORCE:
 
 # These goals don't need to collect and include Android.mks/CleanSpec.mks
 # in the source tree.
-dont_bother_goals := clean clobber dataclean installclean \
+dont_bother_goals := clean clobber dataclean dirty installclean \
     help out \
     snod systemimage-nodeps \
     stnod systemtarball-nodeps \
@@ -1048,6 +1048,14 @@ clean:
 
 .PHONY: clobber
 clobber: clean
+
+# Clears out zip and build.prop
+.PHONY: dirty
+dirty:
+	@rm -rf $(OUT_DIR)/target/product/*/system/build.prop
+	@rm -rf $(OUT_DIR)/target/product/*/*.zip
+	@rm -rf $(OUT_DIR)/target/product/*/*.md5sum
+	@echo -e ${CL_GRN}"build.prop and zip files erased"${CL_RST}
 
 # The rules for dataclean and installclean are defined in cleanbuild.mk.
 
