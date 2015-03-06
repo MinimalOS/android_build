@@ -1059,7 +1059,7 @@ dirty:
 
 # The Peter Special, cleans it just how you like it ;)
 .PHONY: peter
-peter:  dirty && installclean
+peter:  dirty installclean
 	@echo -e ${CL_GRN}"Clean and dirty, just how we like it."${CL_RST}
 	
 # The rules for dataclean and installclean are defined in cleanbuild.mk.
