@@ -466,7 +466,7 @@ function print_lunch_menu()
     echo
     echo "You're building on" $uname
     echo
-    if [ "z${XENONHD_DEVICES_ONLY}" != "z" ]; then
+    if [ "z${MINIMAL_DEVICES_ONLY}" != "z" ]; then
        echo "Breakfast menu... pick a combo:"
     else
        echo "Lunch menu... pick a combo:"
@@ -480,7 +480,7 @@ function print_lunch_menu()
         i=$(($i+1))
     done | column
 
-	if [ "z${XENONHD_DEVICES_ONLY}" != "z" ]; then
+	if [ "z${MINIMAL_DEVICES_ONLY}" != "z" ]; then
        echo "... and don't forget the bacon!"
     fi
 
@@ -502,10 +502,10 @@ function brunch()
 function breakfast()
 {
     target=$1
-    XENONHD_DEVICES_ONLY="true"
+    MINIMAL_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
     add_lunch_combo full-eng
-    for f in `/bin/ls vendor/xenonhd/vendorsetup.sh 2> /dev/null`
+    for f in `/bin/ls vendor/minimal/vendorsetup.sh 2> /dev/null`
         do
             echo "including $f"
             . $f
@@ -522,7 +522,7 @@ function breakfast()
             lunch $target
         else
             # This is probably just the AOKP model name
-            lunch xenonhd_$target-userdebug
+            lunch minimal_$target-userdebug
         fi
     fi
     return $?

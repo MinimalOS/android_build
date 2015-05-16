@@ -988,7 +988,7 @@ INTERNAL_SYSTEMIMAGE_FILES := $(filter $(TARGET_OUT)/%, \
 
 systemimage-squisher: $(INTERNAL_SYSTEMIMAGE_FILES)
 	@echo -e "Optimizing PNGs to Shrink ROM Size!"
-	$(hide) APKCERTS=$(APKCERTS_FILE) ./vendor/xenonhd/tools/squisher
+	$(hide) APKCERTS=$(APKCERTS_FILE) ./vendor/minimal/tools/squisher
 
 .PHONY: systemimage-squisher
 
@@ -1649,12 +1649,12 @@ bacon: otapackage
 ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
 	$(error TARGET_CUSTOM_RELEASETOOL is deprecated)
 endif
-	$(hide) ./vendor/xenonhd/tools/filezip
+	$(hide) ./vendor/minimal/tools/filezip
 
 ifeq ($(USE_PREBUILT_CHROMIUM),1)
 ifneq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
 	@echo -e ${CL_GRN}"Running Chromium prebuilt setup script..."${CL_RST}
-	$(hide) . $(TOPDIR)vendor/xenonhd/tools/chromium_prebuilt.sh $(TOP)
+	$(hide) . $(TOPDIR)vendor/minimal/tools/chromium_prebuilt.sh $(TOP)
 endif
 endif
 

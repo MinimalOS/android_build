@@ -39,12 +39,12 @@ default_rem = "gh"
 # set this to the default revision to use (branch/tag name)
 default_rev = "lp-mr1"
 # set this to the remote that you use for projects from your team repos
-# example fetch="https://github.com/TeamHorizon"
+# example fetch="https://github.com/MinimalOS"
 default_team_rem = "gh"
 # this shouldn't change unless google makes changes
 local_manifest_dir = ".repo/local_manifests"
 # change this to your name on github (or equivalent hosting)
-android_team = "TeamHorizon"
+android_team = "MinimalOS"
 
 def check_repo_exists(git_data):
     if not int(git_data.get('total_count', 0)):
@@ -208,12 +208,12 @@ def parse_device_from_folder(device):
     elif len(search) == 1:
         location = search[0]
     else:
-        print("Your device was not found. Attempting to retrieve device repository from TeamHorizon's Github..")
+        print("Your device was not found. Attempting to retrieve device repository from Minimal Github..")
         location = parse_device_from_manifest(device)
     return location
 
 def parse_dependency_file(location):
-    dep_file = "xenonhd.dependencies"
+    dep_file = "minimal.dependencies"
     dep_location = '/'.join([location, dep_file])
     if not os.path.isfile(dep_location):
         print("WARNING: %s file not found" % dep_location)
