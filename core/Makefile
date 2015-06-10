@@ -1005,7 +1005,7 @@ ifeq ($(HOST_OS), Darwin)
 	CHANGELOG_FILE := changelog_mac
 endif
 $(INSTALLED_FILES_FILE): $(FULL_SYSTEMIMAGE_DEPS)
-	$(hide) ./vendor/xenonhd/tools/$(CHANGELOG_FILE)
+	$(hide) ./vendor/minimal/tools/$(CHANGELOG_FILE)
 	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(PLATFORM_VERSION)-$(TARGET_PRODUCT).txt
 	@echo Installed file list: $@
 	@mkdir -p $(dir $@)
