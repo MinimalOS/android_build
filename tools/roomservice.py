@@ -113,9 +113,9 @@ def iterate_manifests(check_all):
             for project in man.findall("project"):
                 yield project
 
-def check_project_exists(url):
+def check_project_exists(url, revision, path):
     for project in iterate_manifests(True):
-        if project.get("name") == url:
+        if project.get("name") == url and project.get("revision") == revision and project.get("path") == path:
             return True
     return False
 
@@ -145,7 +145,7 @@ def indent(elem, level=0):
 def create_manifest_project(url, directory,
                             remote=default_rem,
                             revision=default_rev):
-    project_exists = check_project_exists(url)
+    project_exists = check_project_exists(url, revision, directory)
 
     if project_exists:
         return None
