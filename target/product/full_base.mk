@@ -24,6 +24,7 @@ PRODUCT_PACKAGES := \
     WAPPushManager
 
 PRODUCT_PACKAGES += \
+    VisualizationWallpapers \
     LiveWallpapersPicker
 
 # Additional settings used in all AOSP builds
