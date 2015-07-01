@@ -19,7 +19,6 @@
 
 PRODUCT_PACKAGES := \
     Bluetooth \
-    Gallery2 \
     OneTimeInitializer \
     Provision \
     SystemUI \
