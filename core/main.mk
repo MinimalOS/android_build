@@ -71,7 +71,7 @@ FORCE:
 
 # These goals don't need to collect and include Android.mks/CleanSpec.mks
 # in the source tree.
-dont_bother_goals := clean clobber dataclean deviceclean dirty installclean peter joe \
+dont_bother_goals := clean clobber dataclean deviceclean dirty installclean mia joe \
     help out \
     snod systemimage-nodeps \
     stnod systemtarball-nodeps \
@@ -1063,10 +1063,10 @@ dirty:
 	@rm -rf $(OUT_DIR)/target/product/*/*.md5sum
 	@echo -e ${CL_GRN}"build.prop and zip files erased"${CL_RST}
 
-# The Peter Special, cleans it just how you like it ;)
-.PHONY: peter
-peter:  dirty installclean
-	@echo -e ${CL_GRN}"Clean and dirty, just how we like it."${CL_RST}
+# The Mia Special, cleans it just how Safvan and Chinmay like it ;)
+.PHONY: mia
+mia:  dirty installclean
+	@echo -e ${CL_GRN}"Clean and dirty, just how Safvan and Chinmay like it."${CL_RST}
 
 # Testing flags an unnecessary amount of times? You must be Joe!
 .PHONY: joe
