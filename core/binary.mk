@@ -97,6 +97,12 @@ else
   endif
 endif
 
+ifeq ($(ELECTRIFY),true)
+	# Include custom gcc flags.  Seperate them so they can be easily managed.
+	include $(BUILD_SYSTEM)/graphite.mk
+	include $(BUILD_SYSTEM)/strict.mk
+endif
+
 # The following LOCAL_ variables will be modified in this file.
 # Because the same LOCAL_ variables may be used to define modules for both 1st arch and 2nd arch,
 # we can't modify them in place.
