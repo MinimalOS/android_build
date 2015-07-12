@@ -75,6 +75,19 @@ $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O2 -fomit-frame-pointer -fstrict-a
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS := -mthumb -Os -fomit-frame-pointer -fno-strict-aliasing
 endif
 
+ifeq ($(SUPPRES_UNUSED_WARNING),true)
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += -Wno-unused-parameter \
+                                             -Wno-unused-value \
+                                             -Wno-unused-function \
+                                             -Wno-unused-but-set-variable \
+                                             -Wno-maybe-uninitialized
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS += -Wno-unused-parameter \
+                                               -Wno-unused-value \
+                                               -Wno-unused-function \
+                                               -Wno-unused-but-set-variable \
+                                               -Wno-maybe-uninitialized
+endif
+
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
 # files that are normally built as thumb; this can make

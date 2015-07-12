@@ -61,6 +61,24 @@ $(combo_var_prefix)GLOBAL_LDFLAGS :=
 $(combo_var_prefix)GLOBAL_ARFLAGS := crsPD
 $(combo_var_prefix)GLOBAL_LD_DIRS :=
 
+ifeq ($(SUPPRES_UNUSED_WARNING),true)
+$(combo_var_prefix)GLOBAL_CFLAGS += -Wno-unused-parameter \
+                                    -Wno-unused-value \
+                                    -Wno-unused-function \
+                                    -Wno-unused-but-set-variable \
+                                    -Wno-maybe-uninitialized
+$(combo_var_prefix)RELEASE_CFLAGS += -Wno-unused-parameter \
+                                     -Wno-unused-value \
+                                     -Wno-unused-function \
+                                     -Wno-unused-but-set-variable \
+                                     -Wno-maybe-uninitialized
+$(combo_var_prefix)GLOBAL_CPPFLAGS += -Wno-unused-parameter \
+                                      -Wno-unused-value \
+                                      -Wno-unused-function \
+                                      -Wno-unused-but-set-variable \
+                                      -Wno-maybe-uninitialized
+endif
+
 $(combo_var_prefix)EXECUTABLE_SUFFIX :=
 $(combo_var_prefix)SHLIB_SUFFIX := .so
 $(combo_var_prefix)JNILIB_SUFFIX := $($(combo_var_prefix)SHLIB_SUFFIX)
