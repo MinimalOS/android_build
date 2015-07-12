@@ -123,7 +123,7 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 # disable "-Wunused-but-set-variable" here.
 ifeq ($(ELECTRIFY),true)
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -fno-builtin-sin \
-						-fno-strict-volatile-bitfields\
+						-fno-strict-volatile-bitfields
 						-fstrict-aliasing
 endif
 
