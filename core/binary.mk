@@ -97,7 +97,8 @@ else
   endif
 endif
 
-ifeq ($(ELECTRIFY),true)
+<<<<<<< HEAD
+ifeq ($(LIQUIFY),true)
 	# Include custom gcc flags.  Seperate them so they can be easily managed.
 	include $(BUILD_SYSTEM)/graphite.mk
 	include $(BUILD_SYSTEM)/strict.mk
