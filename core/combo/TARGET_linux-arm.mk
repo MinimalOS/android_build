@@ -35,14 +35,10 @@ TARGET_$(combo_2nd_arch_prefix)ARCH_VARIANT := armv5te
 endif
 
 # Decouple NDK library selection with platform compiler version
-ifeq ($(ELECTRIFY),true)
 $(combo_2nd_arch_prefix)TARGET_NDK_GCC_VERSION := 4.9
-else
-$(combo_2nd_arch_prefix)TARGET_NDK_GCC_VERSION := 4.8
-endif
 
 ifeq ($(strip $(TARGET_GCC_VERSION_EXP)),)
-$(combo_2nd_arch_prefix)TARGET_GCC_VERSION := 4.8
+$(combo_2nd_arch_prefix)TARGET_GCC_VERSION := SM-4.8
 else
 $(combo_2nd_arch_prefix)TARGET_GCC_VERSION := $(TARGET_GCC_VERSION_EXP)
 endif
@@ -72,7 +68,7 @@ $(combo_2nd_arch_prefix)TARGET_STRIP := $($(combo_2nd_arch_prefix)TARGET_TOOLS_P
 $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
 ifeq ($(ELECTRIFY),true)
-	# Include Graphite Loop Optimizations for ELECTRIFY
+	# Include custom gcc flags.  Seperate them so they can be easily managed.
 	include $(BUILD_SYSTEM)/graphite.mk
 endif
 
@@ -121,10 +117,9 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 # "-Wall -Werror" due to a commom idiom "ALOGV(mesg)" where ALOGV is turned
 # into no-op in some builds while mesg is defined earlier. So we explicitly
 # disable "-Wunused-but-set-variable" here.
-ifeq ($(ELECTRIFY),true)
+ifneq ($(filter 4.6 4.6.% 4.7 4.7.% 4.8 4.8.% 4.9 4.9.%,  $($(combo_2nd_arch_prefix)TARGET_GCC_VERSION)),)
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -fno-builtin-sin \
-						-fno-strict-volatile-bitfields
-						-fstrict-aliasing
+			-fno-strict-volatile-bitfields
 endif
 
 # This is to avoid the dreaded warning compiler message:
