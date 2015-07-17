@@ -77,7 +77,41 @@ $(info   TARGET_ARCH_VARIANT=$(TARGET_ARCH_VARIANT))
 $(info   TARGET_CPU_VARIANT=$(TARGET_CPU_VARIANT))
 $(info   TARGET_GCC_VERSION=$(TARGET_GCC_VERSION))
 $(info   TARGET_NDK_GCC_VERSION=$(TARGET_NDK_GCC_VERSION))
-$(info   USE_HOST_4.8=$(USE_HOST_4.8))
+ifdef    USE_O3_OPTIMIZATIONS
+$(info   USE_O3_OPTIMIZATIONS=$(USE_O3_OPTIMIZATIONS))
+else
+$(info   USE_O3_OPTIMIZATIONS=false)
+endif
+ifdef    FLOOP_NEST_OPTIMIZE
+$(info   FLOOP_NEST_OPTIMIZE=$(FLOOP_NEST_OPTIMIZE))
+else
+$(info   FLOOP_NEST_OPTIMIZE=false)
+endif
+ifdef    FFAST_MATH
+$(info   FFAST_MATH=$(FFAST_MATH))
+else
+$(info   FFAST_MATH=false)
+endif
+ifdef    STRICT_ALIASING
+$(info   STRICT_ALIASING=$(STRICT_ALIASING))
+else     
+$(info   STRICT_ALIASING=false)
+endif
+ifdef    ENABLE_GCCONLY
+$(info   ENABLE_GCCONLY=$(ENABLE_GCCONLY))
+else     
+$(info   ENABLE_GCCONLY=false)
+endif
+ifdef    GRAPHITE_OPTS
+$(info   GRAPHITE_OPTS=$(GRAPHITE_OPTS))
+else     
+$(info   GRAPHITE_OPTS=false)
+endif
+ifdef    USE_HOST_4_8
+$(info   USE_HOST_4_8=$(USE_HOST_4_8))
+else
+$(info   USE_HOST_4_8=false)
+endif
 ifdef TARGET_GCC_VERSION_ARM
 $(info   TARGET_KERNEL_TOOLCHAIN=$(TARGET_GCC_VERSION_ARM))
 else
