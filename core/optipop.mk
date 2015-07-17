@@ -438,7 +438,8 @@ LOCAL_DISABLE_STRICT := \
     camera.msm8084 \
     libmmcamera_interface \
     camera.hammerhead \
-	tcpdump
+	tcpdump \
+	libstlport_static
 
 DISABLE_STRICT := \
     -fno-strict-aliasing
@@ -571,7 +572,9 @@ LOCAL_DISABLE_GRAPHITE := \
     libwebrtc_spl \
     libpcap \
     libsigchain \
-    libFraunhoferAAC
+    libFraunhoferAAC \
+    libavcodec \
+    libavformat
 
 GRAPHITE_FLAGS := \
     -fgraphite \
