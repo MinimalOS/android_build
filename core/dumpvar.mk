@@ -97,6 +97,11 @@ $(info   STRICT_ALIASING=$(STRICT_ALIASING))
 else     
 $(info   STRICT_ALIASING=false)
 endif
+ifdef    KRAIT_TUNINGS
+$(info   KRAIT_TUNINGS=$(KRAIT_TUNINGS))
+else
+$(info   KRAIT_TUNINGS=false)
+endif
 ifdef    ENABLE_GCCONLY
 $(info   ENABLE_GCCONLY=$(ENABLE_GCCONLY))
 else     
