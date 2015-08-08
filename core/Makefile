@@ -1652,13 +1652,22 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
+MINIMAL_TARGET_PACKAGE := $(PRODUCT_OUT)/$(MINIMAL_VERSION)-$(TARGET_DEVICE).zip
+MINIMAL_TARGET_PACKAGE_DISPLAY := $(MINIMAL_VERSION)-$(TARGET_DEVICE).zip
+
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
 	$(error TARGET_CUSTOM_RELEASETOOL is deprecated)
 endif
-	$(hide) ./vendor/minimal/tools/filezip
+	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(MINIMAL_TARGET_PACKAGE)
+	$(hide) $(MD5SUM) $(MINIMAL_TARGET_PACKAGE) > $(MINIMAL_TARGET_PACKAGE).md5sum
+	@echo -e ${CL_CYN}"================-Minimal Package Complete-================"${CL_RST}
+	@echo -e ${CL_CYN}"Zip: "${CL_CYN} $(MINIMAL_TARGET_PACKAGE_DISPLAY)${CL_RST}
+	@echo -e ${CL_CYN}"MD5: "${CL_CYN}" `cat $(MINIMAL_TARGET_PACKAGE).md5sum | cut -d ' ' -f 1`"${CL_RST}
+	@echo -e ${CL_CYN}"Size:"${CL_CYN}" `ls -lah $(MINIMAL_TARGET_PACKAGE) | cut -d ' ' -f 5`"${CL_RST}
+	@echo -e ${CL_CYN}"=========================================================="${CL_RST}
 
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
